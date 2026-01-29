@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Building the Modern Data Stack | Latent Ed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #030712;
+            --bg-card: #0F172A; 
+            --accent: #10b981; 
+            --accent-dark: #059669;
+            --secondary: #3b82f6; 
+            --text-main: #f9fafb;
+            --text-dim: #9ca3af;
+            --border: #1f2937;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(3, 7, 18, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: white;
+        }
+
+        .nav-links a {
+            color: var(--text-dim);
+            text-decoration: none;
+            margin-left: 2.5rem;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--accent); }
+
+        .btn-primary {
+            background: var(--accent);
+            color: var(--bg-deep);
+            padding: 0.75rem 1.75rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            display: inline-block;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: radial-gradient(circle at top right, #111827 0%, #030712 100%);
+            padding: 6rem 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 4vw, 3.5rem);
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 3rem;
+            margin-top: 3rem;
+            justify-content: center;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            color: var(--accent);
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 6rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: clamp(2rem, 3vw, 2.75rem);
+            color: white;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-dim);
+            font-size: 1.15rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Key Takeaways */
+        .takeaways-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .takeaway-card {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .takeaway-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .takeaway-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .takeaway-card h4 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .takeaway-card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Who This Is For */
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .audience-card {
+            background: var(--bg-card);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent);
+        }
+
+        .audience-card h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .audience-card p {
+            color: var(--text-dim);
+            line-height: 1.7;
+        }
+
+        /* Programme Highlights */
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .highlight-item {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .highlight-item .icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+        }
+
+        .highlight-item h4 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .highlight-item p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Curriculum */
+        .curriculum-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .curriculum-week {
+            background: var(--bg-card);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        .week-number {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .week-content h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .week-content h4 {
+            color: var(--secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .week-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .week-content li {
+            color: var(--text-dim);
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .week-content li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .milestone {
+            grid-column: 1 / -1;
+            background: rgba(16, 185, 129, 0.05);
+            border: 2px dashed var(--accent);
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .milestone strong {
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .phase-divider {
+            grid-column: 1 / -1;
+            border-left: 4px solid var(--accent);
+            padding-left: 1.5rem;
+            margin: 2rem 0 1.5rem 0;
+        }
+
+        .phase-divider h3 {
+            font-size: 2rem;
+            color: white;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-divider p {
+            color: var(--text-dim);
+            font-style: italic;
+        }
+
+        /* Enrollment CTA */
+        .enrollment-cta {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 4rem;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .enrollment-cta h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .enrollment-cta .price {
+            font-size: 4rem;
+            color: var(--accent);
+            font-weight: 800;
+            margin: 2rem 0;
+        }
+
+        .enrollment-details {
+            max-width: 600px;
+            margin: 2rem auto;
+            text-align: left;
+        }
+
+        .enrollment-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .enrollment-details li {
+            color: var(--text-dim);
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .enrollment-details li:last-child {
+            border-bottom: none;
+        }
+
+        .enrollment-details strong {
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        footer p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .curriculum-week {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .section div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">LATENT <span style="color: var(--accent);">ED</span></div>
+            <div class="nav-links">
+                <a href="#about">About</a>
+                <a href="#curriculum">Curriculum</a>
+                <a href="#enrollment">Enrollment</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Building the Modern <span style="color: var(--accent);">Data Stack</span></h1>
+                <p class="subtitle">The backbone of the $300B data economy. Master cloud infrastructure, data pipelines, and production-ready engineering in this comprehensive 12-week programme.</p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h3>12 Weeks</h3>
+                        <p>Intensive hands-on training</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>£1000</h3>
+                        <p>Total programme fee</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>5+ Tools</h3>
+                        <p>Industry-standard platforms</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Takeaways -->
+    <div class="container">
+        <section class="section" id="about">
+            <div class="section-header">
+                <h2>What You Will Learn</h2>
+                <p>This intensive programme is designed to equip you with production-grade data engineering skills, enabling you to build scalable data infrastructure that powers modern organizations.</p>
+            </div>
+
+            <div class="takeaways-grid">
+                <div class="takeaway-card">
+                    <div class="icon">🗄️</div>
+                    <h4>Master the Data Engineering Lifecycle</h4>
+                    <p>Understand ETL/ELT paradigms, data modeling architectures, and the complete data engineering workflow from ingestion to consumption.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="icon">☁️</div>
+                    <h4>Build Cloud Data Infrastructure</h4>
+                    <p>Deploy data lakes and warehouses on AWS/GCP, implement infrastructure as code with Terraform, and optimize cloud data storage.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="icon">🔄</div>
+                    <h4>Orchestrate Data Pipelines</h4>
+                    <p>Create production-ready data workflows using Apache Airflow, automate ETL processes, and manage complex data dependencies.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="icon">⚡</div>
+                    <h4>Process Data at Scale</h4>
+                    <p>Handle big data using Apache Spark and PySpark for distributed computing and batch processing of multi-GB datasets.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="icon">🛠️</div>
+                    <h4>Transform Data with dbt</h4>
+                    <p>Implement modern analytics engineering practices, build data transformation models, and ensure data quality at scale.</p>
+                </div>
+                <div class="takeaway-card">
+                    <div class="icon">🚀</div>
+                    <h4>Deploy Production Systems</h4>
+                    <p>Build a complete end-to-end data platform as your capstone project and graduate with a production-ready portfolio.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Who This Is For -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Who Is This Programme For?</h2>
+                <p>This programme is designed for technical professionals ready to advance into data engineering roles.</p>
+            </div>
+
+            <div class="audience-grid">
+                <div class="audience-card">
+                    <h3>Software Engineers</h3>
+                    <p>Developers with Python or other programming experience who want to specialize in data infrastructure and transition into high-demand data engineering roles.</p>
+                </div>
+                <div class="audience-card">
+                    <h3>Data Analysts</h3>
+                    <p>Analytics professionals with SQL skills who want to move upstream into building the data pipelines and infrastructure that power analytics.</p>
+                </div>
+                <div class="audience-card">
+                    <h3>Technical STEM Graduates</h3>
+                    <p>Recent graduates with strong technical backgrounds in computer science, mathematics, or engineering who want to launch their career in data engineering.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Programme Highlights -->
+        <section class="section">
+            <div class="section-header">
+                <h2>Programme Highlights</h2>
+            </div>
+
+            <div class="highlights-grid">
+                <div class="highlight-item">
+                    <div class="icon">🎓</div>
+                    <h4>Industry Expertise</h4>
+                    <p>Learn from data engineers with production experience at scale</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon">⚙️</div>
+                    <h4>Hands-On Engineering</h4>
+                    <p>60% hands-on-keyboard time building real data infrastructure</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon">🏗️</div>
+                    <h4>Production Portfolio</h4>
+                    <p>Deploy live data pipelines and infrastructure projects</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon">👥</div>
+                    <h4>Personal Mentorship</h4>
+                    <p>One-on-one technical mentorship and architecture reviews</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon">📄</div>
+                    <h4>CV Preparation</h4>
+                    <p>Professional CV reviews optimized for data engineering roles</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon">⏰</div>
+                    <h4>Flexible Schedule</h4>
+                    <p>2 sessions per week (3 hours each) for working professionals</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon">🐛</div>
+                    <h4>Office Hours</h4>
+                    <p>Debugging marathons and technical problem-solving sessions</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="icon">🚀</div>
+                    <h4>Career Ready</h4>
+                    <p>Graduate with deployable projects and technical interview prep</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Curriculum -->
+        <section class="section" id="curriculum">
+            <div class="section-header">
+                <h2>Curriculum Overview</h2>
+                <p>A comprehensive 12-week journey from fundamentals to production-ready data engineering.</p>
+            </div>
+
+            <div class="curriculum-list">
+                <div class="phase-divider">
+                    <h3>Phase 1: The Foundations (Weeks 1-5)</h3>
+                    <p>Establishing the core skills of the data engineering lifecycle.</p>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 01</div>
+                    <div class="week-content">
+                        <h3>Introduction to the Data Engineering Lifecycle</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>Role of a Data Engineer vs. Data Scientist</li>
+                            <li>Structured vs. Unstructured data</li>
+                            <li>The ETL/ELT paradigm</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Set up development environment (Docker, VS Code, Git)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 02</div>
+                    <div class="week-content">
+                        <h3>SQL Foundations for Data Engineers</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>SQL Basics: SELECT, WHERE, ORDER BY, LIMIT</li>
+                            <li>Data Types and Type Casting</li>
+                            <li>Filtering with AND, OR, IN, BETWEEN, LIKE</li>
+                            <li>Aggregate Functions: COUNT, SUM, AVG, MIN, MAX</li>
+                            <li>GROUP BY and HAVING clauses</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Write queries to explore and analyze a sample e-commerce database</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 03</div>
+                    <div class="week-content">
+                        <h3>Advanced SQL for Data Engineering</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>JOINs: INNER, LEFT, RIGHT, FULL OUTER, CROSS</li>
+                            <li>Subqueries and Nested Queries</li>
+                            <li>Common Table Expressions (CTEs) and WITH clauses</li>
+                            <li>Window Functions: ROW_NUMBER, RANK, DENSE_RANK, LAG, LEAD</li>
+                            <li>Query Optimization and Performance Tuning</li>
+                            <li>Indexes and Execution Plans</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Design and optimize complex analytical queries for a retail dataset</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 04</div>
+                    <div class="week-content">
+                        <h3>Python for Data Automation</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>Virtual environments; Pandas for transformation</li>
+                            <li>Interacting with APIs</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Build a script to extract live weather or finance data from an API</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 05</div>
+                    <div class="week-content">
+                        <h3>Data Modeling & Architecture</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>Star vs. Snowflake schemas</li>
+                            <li>Normalization vs. Denormalization</li>
+                            <li>Medallion Architecture (Bronze/Silver/Gold)</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Model a "Star Schema" for a sample Airbnb dataset</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="milestone">
+                    <span style="font-size: 1.5rem;">🏆</span> <strong>Milestone:</strong> Your first Relational Schema
+                </div>
+
+                <div class="phase-divider">
+                    <h3>Phase 2: Building the Infrastructure (Weeks 6-9)</h3>
+                    <p>Moving data into the cloud and orchestrating workflows.</p>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 06</div>
+                    <div class="week-content">
+                        <h3>Cloud Storage & Data Lakes</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>Intro to AWS S3 / Google Cloud Storage</li>
+                            <li>Infrastructure as Code (Terraform)</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Use Terraform to provision a cloud storage bucket and upload raw data</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 07</div>
+                    <div class="week-content">
+                        <h3>Modern Data Warehousing</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>BigQuery/Snowflake internals</li>
+                            <li>Partitioning and Clustering</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Load data from a Data Lake into a Warehouse and optimize query performance</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 08</div>
+                    <div class="week-content">
+                        <h3>Workflow Orchestration</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>Introduction to DAGs (Directed Acyclic Graphs)</li>
+                            <li>Airflow vs. Dagster vs. Mage</li>
+                            <li>Orchestration: Apache Airflow DAGs</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Create an Airflow DAG to automate the Week 3 API script</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 09</div>
+                    <div class="week-content">
+                        <h3>Analytics Engineering with dbt</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>Transforming data inside the warehouse</li>
+                            <li>The dbt Revolution: SQL Transformations</li>
+                            <li>Data Quality & Metric Stores</li>
+                            <li>Version control for SQL</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Use dbt to build a production-ready view of your Star Schema</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="milestone">
+                    <span style="font-size: 1.5rem;">🚀</span> <strong>Milestone:</strong> An automated ETL pipeline in the Cloud
+                </div>
+
+                <div class="phase-divider">
+                    <h3>Phase 3: Scaling & Production (Weeks 10-12)</h3>
+                    <p>Advanced processing and professional deployment.</p>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 10</div>
+                    <div class="week-content">
+                        <h3>Batch Processing at Scale (Spark)</h3>
+                        <h4>Topics</h4>
+                        <ul>
+                            <li>Distributed computing; PySpark</li>
+                            <li>Handling "Big Data"</li>
+                        </ul>
+                        <h4>Activity</h4>
+                        <ul>
+                            <li>Process a multi-GB dataset using a Spark cluster</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="curriculum-week">
+                    <div class="week-number">WEEK 11-12</div>
+                    <div class="week-content">
+                        <h3>Capstone & Professional Deployment</h3>
+                        <ul>
+                            <li>Real-time data integration</li>
+                            <li>Production-ready Capstone project completion</li>
+                            <li>Portfolio presentation and review</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="milestone">
+                    <span style="font-size: 1.5rem;">🎯</span> <strong>Milestone:</strong> Production-ready data platform portfolio
+                </div>
+            </div>
+        </section>
+
+        <!-- Enrollment CTA -->
+        <section class="section" id="enrollment">
+            <div class="enrollment-cta">
+                <h2>Ready to Build the Modern Data Stack?</h2>
+                <p style="color: var(--text-dim); font-size: 1.1rem; margin-bottom: 2rem;">Join our next cohort and become a production-ready data engineer</p>
+                
+                <div class="price">£1000</div>
+                
+                <div class="enrollment-details">
+                    <ul>
+                        <li>
+                            <span>Duration</span>
+                            <strong>12 Weeks</strong>
+                        </li>
+                        <li>
+                            <span>Schedule</span>
+                            <strong>2x per week (3 hours)</strong>
+                        </li>
+                        <li>
+                            <span>Format</span>
+                            <strong>Live Online Sessions</strong>
+                        </li>
+                        <li>
+                            <span>Class Size</span>
+                            <strong>Limited to 15 students</strong>
+                        </li>
+                        <li>
+                            <span>Career Support</span>
+                            <strong>Mentorship & CV Prep Included</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                <a href="#enrollment" class="btn-primary" style="margin-top: 2rem; padding: 1.25rem 3rem; font-size: 1.1rem;">SECURE YOUR SEAT</a>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Latent Ed. All rights reserved. | Data Engineering Programme</p>
+    </footer>
+
+</body>
+</html>
